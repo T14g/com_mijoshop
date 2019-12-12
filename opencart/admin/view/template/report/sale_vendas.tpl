@@ -80,15 +80,16 @@
               </tr>
             </thead>
             <tbody>
-              <?php if ($orders) { ?>
-              <?php foreach ($orders as $order) { ?>
+              <?php if ($cursos) { ?>
+              <?php foreach ($cursos as $curso) { ?>
               <tr>
-                <td class="text-left"><?php echo $order['date_start']; ?></td>
-                <td class="text-left"><?php echo $order['date_end']; ?></td>
-                <td class="text-right"><?php echo $order['orders']; ?></td>
-                <td class="text-right"><?php echo $order['products']; ?></td>
-                <td class="text-right"><?php echo $order['tax']; ?></td>
-                <td class="text-right"><?php echo $order['total']; ?></td>
+                <td class="text-left"><?php echo $curso['nome_curso']; ?></td>
+                <td class="text-left"><?php echo curso['date_start']; ?></td>
+                <td class="text-left"><?php echo curso['date_end']; ?></td>
+                <td class="text-right"><?php echo curso['orders']; ?></td>
+                <td class="text-right"><?php echo curso['products']; ?></td>
+        
+                <td class="text-right"><?php echo curso['total']; ?></td>
                 <td> I walk alone i</td>
               </tr>
               <?php } ?>

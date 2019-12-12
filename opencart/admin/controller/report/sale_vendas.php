@@ -84,18 +84,24 @@ class ControllerReportSaleVendas extends Controller {
 
 		$order_total = $this->model_report_sale->getTotalOrders($filter_data);
 
-		$results = $this->model_report_sale->getOrders($filter_data);
+		// T14g - You Must load this 
+		$this->load->model('report/vendas');
 
-		foreach ($results as $result) {
-			$data['orders'][] = array(
-				'date_start' => date($this->language->get('date_format_short'), strtotime($result['date_start'])),
-				'date_end'   => date($this->language->get('date_format_short'), strtotime($result['date_end'])),
-				'orders'     => $result['orders'],
-				'products'   => $result['products'],
-				'tax'        => $this->currency->format($result['tax'], $this->config->get('config_currency')),
-				'total'      => $this->currency->format($result['total'], $this->config->get('config_currency'))
+		$resultados = $this->model_report_vendas->getVendas();
+
+		foreach ($resultados as $result) {
+			$data['cursos'][] = array(
+				// 'date_start' => date($this->language->get('date_format_short'), strtotime($result['date_start'])),
+				// 'date_end'   => date($this->language->get('date_format_short'), strtotime($result['date_end'])),
+				// 'orders'     => $result['orders'],
+				// 'products'   => $result['products'],
+				'nome_curso' => $result['name'],
+				// 'tax'        => $this->currency->format($result['tax'], $this->config->get('config_currency')),
+				// 'total'      => $this->currency->format($result['total'], $this->config->get('config_currency'))
 			);
 		}
+
+		// var_dump($data['cursos']);
 
 		$data['heading_title'] = $this->language->get('heading_title');
 		
@@ -183,6 +189,7 @@ class ControllerReportSaleVendas extends Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
+		// var_dump($data);
 		$this->response->setOutput($this->load->view('report/sale_vendas.tpl', $data));
 	}
 }
