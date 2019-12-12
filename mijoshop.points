@@ -1,0 +1,29 @@
+[
+	{
+		"title"			: "MijoShop Purchase",
+		"alias"			: "mijoshop-purchase",
+		"description"	: "Earn points when you buy product via MijoShop.",
+		"command"		: "mijoshop.purchase",
+		"extension"		: "com_mijoshop",
+		"state"			: true,
+		"points"		: 0
+	},
+	{
+		"title"			: "MijoShop Cancel Purchase",
+		"alias"			: "mijoshop-cancel",
+		"description"	: "Demote points when you cancel order.",
+		"command"		: "mijoshop.cancel",
+		"extension"		: "com_mijoshop",
+		"state"			: true,
+		"points"		: 0
+	},	
+	{
+		"title"			: "MijoShop Payment",
+		"alias"			: "mijoshop-gateway",
+		"description"	: "Demote points when you use EasySocial payment gateway via MijoShop.",
+		"command"		: "mijoshop.gateway",
+		"extension"		: "com_mijoshop",
+		"state"			: true,
+		"points"		: 0
+	}
+]
