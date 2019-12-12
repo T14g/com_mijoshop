@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<name>E-commerce Google Analitycs (básico)</name>
+	<version>1.0.0</version>
+	<author>Roberto Oliveira</author>
+	
+	<file path="catalog/controller/checkout/confirm.php" >
+	<operation>
+		<search><![CDATA[
+			$data['payment'] = $this->load->controller('payment/' . $this->session->data['payment_method']['code']);
+			]]></search>
+		<add position="before"><![CDATA[
+			$data['order_id'] = $this->session->data['order_id'];
+			]]></add>
+	</operation>
+	<operation>
+		<search><![CDATA[
+			'text'  => $this->currency->format($total['value']),
+			]]></search>
+		<add position="before"><![CDATA[
+			'gatotal'  => $total['value'],
+			]]></add>
+	</operation>
+	
+	<operation>
+		<search><![CDATA[
+			'price'      => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'))),
+			]]></search>
+		<add position="before"><![CDATA[
+			'gaprice'      => $product['price'],
+			]]></add>
+	</operation>
+	</file>	
+	<file path="catalog/view/theme/*/template/checkout/confirm.tpl" >
+		<operation>
+		<search><![CDATA[
+			<?php echo $payment; ?>
+			]]></search>
+		<add position="after"><![CDATA[
+<script type="text/javascript">
+	window.ga = window.ga || function() {
+    	(window.ga.q = window.ga.q || []).push(arguments)
+ 	}
+  ga('create', 'UA-51069647-1');
+  ga('require', 'ecommerce');
+  // Código para adicionar pedido: 
+  ga('ecommerce:addTransaction', {
+    'id': '<?php echo $order_id; ?>', // número do pedido
+    'affiliation': 'CTSEM', 
+    'revenue': '<?php echo number_format($total["gatotal"], 2, ".", ""); ?>', // valor total do pedido
+    'shipping': '0', 
+    'tax': '0', 
+    'currency': 'BRL'  
+    });
+
+//add os produtos
+<?php foreach ($products as $product) { 
+   $preco = number_format($product["gaprice"], 2, '.', '');
+?>
+  ga('ecommerce:addItem', {
+    'id': '<?php echo $order_id; ?>', // número do pedido;
+    'name': '<?php echo $product["name"]; ?>', 
+    'sku': '', 
+    'category': '<?php echo $product["model"]; ?>', 
+    'price': '<?php echo $preco; ?>', 
+    'quantity': '<?php echo $product["quantity"]; ?>', 
+    'currency': 'BRL' 
+  });
+<?php } ?>
+  $('#button-confirm').click(function () {
+    ga('ecommerce:send'); // envia a transação
+    <!-- Event snippet for Pedido no site - ADS conversion page -->
+	gtag('event', 'conversion', {
+      'send_to': 'AW-988536480/zoMACMedx6UBEKC9r9cD',
+      'transaction_id': '<?php echo $order_id; ?>'
+  	});
+    
+    //facebook
+    <?php foreach ($products as $product) { ?>
+	    fbq('track', 'Purchase', {
+	    	value: <?php echo number_format($product["gaprice"], 2, '.', '') ?>, 
+	    	currency: 'BRL',	    	
+		    contents: [
+		        {
+		            id: '<?php echo $order_id; ?>',
+		            quantity: 1
+		        }
+		    ],
+		    content_ids: '<?php echo $order_id; ?>',
+		    content_type: 'product',
+		});
+	<?php } ?>
+  }); 
+</script>
+			]]></add>
+	</operation>
+
+	</file>
+</modification>

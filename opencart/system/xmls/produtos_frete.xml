@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<name>Produtos com Entrega</name>
+	<version>1.0.0</version>
+	<author>Roberto Oliveira</author>
+
+	<file path="admin/language/portuguese-br/common/menu.php">
+   		<operation error="skip">
+   			<search><![CDATA[$_['text_module']			= 'Módulos';]]></search>
+   			<add position="after">
+			<![CDATA[
+			$_['text_produtos_frete']			= 'Produtos com entrega';
+			]]>
+   			</add>
+   		</operation>
+   	</file>
+	<file path="admin/controller/common/menu.php">
+   		<operation error="skip">
+   			<search><![CDATA[
+			$data['text_module'] = $this->language->get('text_module');
+			]]></search>
+   			<add position="after">
+			<![CDATA[
+			$data['text_produtos_frete'] = "Produtos com entrega";
+			]]>
+   			</add>
+   		</operation>
+   		<operation error="skip">
+   			<search><![CDATA[
+			$data['module'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL');
+			]]></search>
+   			<add position="after">
+			<![CDATA[
+			$data['produtos_frete'] = $this->url->link('report/produtos_frete', 'token=' . $this->session->data['token'], 'SSL');
+			]]>
+   			</add>
+   		</operation>
+   	</file>
+	<file path="admin/view/template/common/menu.tpl">
+   		<operation error="skip">
+   			<search><![CDATA[<li><a href="<?php echo $report_product_purchased; ?>"><?php echo $text_report_product_purchased; ?></a></li>]]></search>
+   			<add position="after">
+			<![CDATA[
+			<li><a href="<?php echo $produtos_frete; ?>">Cursos com entrega</a></li>
+			]]>
+   			</add>
+   		</operation>
+   	</file>
+</modification>

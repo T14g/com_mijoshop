@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<name>Produtos por Cliente</name>
+	<version>1.0.2</version>
+	<author>Roberto (adaptado de Cristiano)</author>
+
+	<file path="admin/language/portuguese-br/common/menu.php">
+   		<operation error="skip">
+   			<search><![CDATA[$_['text_module']			= 'Módulos';]]></search>
+   			<add position="after">
+			<![CDATA[
+			$_['text_products_by_client']			= 'Produtos por Cliente';
+			]]>
+   			</add>
+   		</operation>
+   	</file>
+	<file path="admin/controller/common/menu.php">
+   		<operation error="skip">
+   			<search><![CDATA[
+			$data['text_module'] = $this->language->get('text_module');
+			]]></search>
+   			<add position="after">
+			<![CDATA[
+			$data['text_products_by_client'] = "Produtos por Cliente";
+			]]>
+   			</add>
+   		</operation>
+   		<operation error="skip">
+   			<search><![CDATA[
+			$data['module'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL');
+			]]></search>
+   			<add position="after">
+			<![CDATA[
+			$data['products_by_client'] = $this->url->link('report/products_by_client', 'token=' . $this->session->data['token'], 'SSL');
+			]]>
+   			</add>
+   		</operation>
+   	</file>
+	<file path="admin/view/template/common/menu.tpl">
+   		<operation error="skip">
+   			<search><![CDATA[<li><a href="<?php echo $report_product_purchased; ?>"><?php echo $text_report_product_purchased; ?></a></li>]]></search>
+   			<add position="after">
+			<![CDATA[
+			<li><a href="<?php echo $products_by_client; ?>">Cursos por Cliente</a></li>
+			]]>
+   			</add>
+   		</operation>
+   	</file>
+</modification>

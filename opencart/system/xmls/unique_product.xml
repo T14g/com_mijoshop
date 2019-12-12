@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<name>Unica unidade e Produto</name>
+	<version>1.0.0</version>
+	<author>Roberto adaptado de (Cristiano e Dalibor)</author>
+	<!-- APENAS UM PRODUTO -->
+	<file path="catalog/controller/checkout/cart.php" >
+	<operation>
+		<search><![CDATA[function add() {]]></search>
+		<add position="after"><![CDATA[$this->cart->clear();]]></add>
+	</operation>
+	</file>	
+	<!-- APENAS UMA UNIDADE -->
+	<file path="system/library/cart.php">
+		<operation>
+			<search><![CDATA[
+			public function hasDownload() {
+			]]></search>
+			<add position="before"><![CDATA[
+			public function isExistCartProduct($product_id) {
+				$cart = $this->session->data['cart'];
+				foreach($cart as $idProduct => $qtd){
+					$id = (int)preg_replace("#\D#", "", $idProduct);
+					if($product_id == $id){
+						return true;
+					}
+				}
+				return false;
+			}
+			]]></add>
+		</operation>
+	</file>	
+	<file path="catalog/controller/checkout/cart.php">
+		<operation>
+			<search><![CDATA[
+			public function index() {
+			]]></search>
+			<add position="after"><![CDATA[
+			if(!empty($this->request->post['quantity'])){
+				$quantity = $this->request->post['quantity'];
+				foreach($quantity as $idProduct => $qtd){
+					if($qtd > 1){
+						$this->request->post['quantity'][$idProduct] = 1;
+					}
+				}
+			}
+			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[
+			$product_info = $this->model_catalog_product->getProduct($product_id);
+			]]></search>
+			<add position="after"><![CDATA[
+			if($this->cart->isExistCartProduct($product_id)){
+				$total = $this->cart->getSubTotal();
+
+				$json['success'] = sprintf($this->language->get('text_success'), $this->url->link('product/product', 'product_id=' . $this->request->post['product_id']), $product_info['name'], $this->url->link('checkout/cart'));
+
+				$json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total));
+
+				$this->response->setOutput(json_encode($json));
+				return false;
+			}
+			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[
+				$quantity = (int)$this->request->post['quantity'];
+			]]></search>
+			<add position="replace"><![CDATA[
+				$quantity = 1;
+			]]></add>
+		</operation>
+		
+	</file>
+</modification>

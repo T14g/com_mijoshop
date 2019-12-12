@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+<name>Correios Offline [Loja5]</name>
+<version>1.0</version>
+<author>Bruno Alencar - suportedaloja@gmail.com</author>
+<code>correios-offline-loja5</code>
+<description></description>
+
+<file path="catalog/model/shipping/correios.php">
+<operation>
+<notes></notes>
+<search index="" regex="false" trim="false"><![CDATA[$url = "http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?";]]></search>
+<add offset="0" trim="false" position="replace"><![CDATA[
+//substitua a url correios pela correios offline
+$regra = $this->config->get('correios_offline5_regra');
+$status_off = $this->config->get('correios_offline5_status');
+if($status_off==0){
+$url = "http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?";
+}else{
+$url = HTTPS_SERVER.'index.php?route=module/correios_offline5/calcular&';
+}
+]]></add>
+</operation>
+</file>
+
+</modification>

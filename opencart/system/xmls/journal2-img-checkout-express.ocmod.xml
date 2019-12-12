@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name><![CDATA[Fix IMG Checkout & Registro Express [Loja5]]]></name>
+	<version>2.0</version>
+	<author>Bruno Alencar - http://www.loja5.com.br</author>
+	<code>journal2-checkout-express-loja5</code>
+	<link>http://www.loja5.com.br</link>
+	
+	<file path="catalog/view/theme/*/template/checkout/confirm.tpl">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[<td class="text-left name"><?php echo $column_name; ?></td>]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[
+			<td class="text-left">&nbsp;</td>
+			]]></add>
+		</operation>
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[<td class="text-left name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a>]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[
+			<?php if(isset($product['imagem'])){ ?>
+			<td class="text-left"><img src="<?php echo @$product['imagem']; ?>" class="img-thumbnail" /></td>
+			<?php } ?>
+			]]></add>
+		</operation>
+	</file>
+	
+</modification>

@@ -1,0 +1,112 @@
+<modification>
+    <name>Layout CTSEM</name>
+    <version>1.2</version>
+    <vqmver>2.1.7</vqmver>
+    <author>Roberto Oliveira (TOPWEB Master)</author>
+    
+    <file path="catalog/controller/product/category.php">
+        <operation>
+            <search><![CDATA[ $this->load->model('tool/image'); ]]></search>
+            <add position="after"><![CDATA[ //roberto
+            if (isset($this->request->post['local'])) {
+                $local = $this->request->post['local'];
+            } else{ $local = ""; }
+            if (isset($this->request->post['data_curso'])) {
+                $data_curso = $this->request->post['data_curso'];
+            }else{ $data_curso = ""; }
+
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[ $path = ''; ]]></search>
+            <add position="before" ><![CDATA[ //roberto
+            /*if (isset($this->request->post['local'])) {
+                $url .= '&local=' . $this->request->post['local'];
+            }
+            if (isset($this->request->post['data_curso'])) {
+                $url .= '&data_curso=' . $this->request->post['data_curso'];
+            }*/
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[ 'limit'              => $limit ]]></search>
+            <add position="before" ><![CDATA[ //roberto
+            'filter_manufacturer_id'  => $local, 
+            'filter_data_curso' => $data_curso,
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[ $this->load->model('tool/image'); ]]></search>
+            <add position="before" ><![CDATA[ //roberto
+                $this->load->model('catalog/ctsem');
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[ $product_total = $this->model_catalog_product->getTotalProducts($filter_data);
+             ]]></search>
+            <add position="before" index="1" ><![CDATA[ //roberto
+            
+            $mesAno = $this->model_catalog_ctsem->getCtsemdatas($category_id);
+            $local_id = $this->model_catalog_ctsem->getCtsemlocal($category_id);
+            $localname = $this->model_catalog_ctsem->getCtsemlocalname($category_id);
+            foreach ($mesAno as $valor_data) {
+                $data['nova_data'][] = array('data_nova' => $valor_data['dataNova']);
+            }
+            foreach($local_id as $valores){
+                if($valores['manufacturer_id']){
+                    $data['novo'][] = array('id' => $valores['manufacturer_id']);
+                }
+            }
+            foreach($localname as $local){
+                $localiza[] = array('nome' => $local['name']);
+            }
+            $tamanho = count($data['novo']);
+            for ($i=0; $i < $tamanho; $i++) { 
+                array_push($data['novo'][$i], $localiza[$i]['nome']);
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[ 'product_id'  => $result['product_id'], ]]></search>
+            <add position="before" ><![CDATA[ //roberto
+                    'manufacturer'  => $result['manufacturer'],
+                    'manufacturer_id'  => $result['manufacturer_id'],
+                    'model'  => $result['model'],
+                    'date_added'  => $result['date_added'],
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[ 'description' => utf8_substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, $this->config->get('config_product_description_length')) . '..', ]]></search>
+            <add position="replace" ><![CDATA[ //roberto
+                    'description' => html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/product/manufacturer.php">
+        <operation>
+            <search><![CDATA[ 'special'     => $special, ]]></search>
+            <add position="before"><![CDATA[ //Roberto 
+                'date_added'  => $result['date_added'],
+                'model'  => $result['model'],
+            ]]></add>
+        </operation>
+         <operation>
+            <search><![CDATA[ 'description' => utf8_substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, $this->config->get('config_product_description_length')) . '..', ]]></search>
+            <add position="replace" ><![CDATA[ //roberto
+                    'description' => html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'),
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/model/catalog/product.php">
+        <operation>
+            <search><![CDATA[ $sql .= " GROUP BY p.product_id"; ]]></search>
+            <add position="before"><![CDATA[ //Roberto Filtrar por datas (mês e ano)
+                $separar = explode("-", $data['filter_data_curso']);
+                if (!empty($data['filter_data_curso'])) {
+                    $sql .= " AND YEAR(p.date_added) = '".$separar[1] . "' AND MONTH(p.date_added) = '".$separar[0]."'";
+                }
+
+            ]]></add>
+        </operation>
+    </file>
+</modification>	

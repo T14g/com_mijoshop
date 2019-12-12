@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name><![CDATA[Checkout & Registro Express [Loja5]]]></name>
+	<version>3.0</version>
+	<author>Bruno Alencar - http://www.loja5.com.br</author>
+	<code>checkout-express-loja5</code>
+	<link>http://www.loja5.com.br</link>
+	
+	<file path="catalog/view/theme/*/template/account/login.tpl">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[<?php if ($redirect) { ?>]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[
+			<?php if(isset($facebook_ativado) && $facebook_ativado){?>
+			 ou <input type="button" value="Entrar com Facebook" onclick="LoginFB(true)" class="btn btn-info button" />
+			 <?php } ?>
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/view/theme/*/template/checkout/confirm.tpl">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[colspan="4"]]></search>
+			<add offset="0" trim="false" position="replace"><![CDATA[
+			<?php if(isset($product['imagem'])){ ?>
+			colspan="5"
+			<?php }else{ ?>
+			colspan="4"
+			<?php } ?>
+			]]></add>
+		</operation>
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[<td class="text-left"><?php echo $column_name; ?></td>]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[
+			<td class="text-left">&nbsp;</td>
+			]]></add>
+		</operation>
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[<td class="text-left"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?>]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[
+			<?php if(isset($product['imagem'])){ ?>
+			<td class="text-left"><img src="<?php echo @$product['imagem']; ?>" class="img-thumbnail" /></td>
+			<?php } ?>
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/controller/account/login.php">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[$this->load->language('account/login');]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[
+			//ativa ou nao o login facebook
+			$data['facebook_ativado'] = $this->config->get('compraexpress_fb');
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/controller/common/header.php">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[$this->load->language('common/header');]]></search>
+			<add offset="0" trim="false" position="after"><![CDATA[	
+			//ativa ou nao o login facebook
+			$data['facebook_ativado'] = $this->config->get('compraexpress_fb');
+			$data['facebook_id'] = $this->config->get('compraexpress_fbid');
+			$data['facebook_sec'] = $this->config->get('compraexpress_fbsec');
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/controller/account/logout.php">
+		<operation>
+			<search index="" regex="false" trim="false"><![CDATA[unset($this->session->data['vouchers']);]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[
+			//remove a session de email rapido
+			if(isset($this->session->data['email_rapido'])){
+			unset($this->session->data['email_rapido']);
+			unset($this->session->data['id_endereco_c']);
+			unset($this->session->data['id_endereco_e']);
+		    }
+		    //limpa mensagens de sucesso
+			if (isset($this->session->data['success'])) {
+				unset($this->session->data['success']);
+			}
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/controller/checkout/success.php">
+		<operation>
+			<search index="" regex="false" trim="false"><![CDATA[unset($this->session->data['totals']);]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[
+			//remove a session de email rapido
+			if(isset($this->session->data['email_rapido'])){
+			unset($this->session->data['email_rapido']);
+			unset($this->session->data['id_endereco_c']);
+			unset($this->session->data['id_endereco_e']);
+		    }
+		    //limpa mensagens de sucesso
+			if (isset($this->session->data['success'])) {
+				unset($this->session->data['success']);
+			}
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/view/theme/*/template/common/header.tpl">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[<?php foreach ($links as $link) { ?>]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[	
+			<script>var urlSSL = '<?php echo HTTPS_SERVER; ?>';</script>
+			]]></add>
+		</operation>
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[</head>]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[
+			<?php if(isset($facebook_ativado) && $facebook_ativado){?>
+            <script>
+            window.fbAsyncInit = function() {
+            FB.init({
+            appId      : '<?php echo @$facebook_id;?>',
+            xfbml      : true,
+            version    : 'v2.4'
+            });
+            };
+            
+            (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/pt_BR/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+            
+            function LoginFB(login){
+                FB.login(function(response) {
+            	console.log(response);
+                if (response.status === 'connected') {
+                var SignFbResquest = response.authResponse.signedRequest;
+                FB.api('/me?fields=id,first_name,last_name,email', function(response) {
+            		console.log(response);
+                	if (typeof response.email != 'undefined') {
+                	if(login==true){
+                	validarEmailFacebook(response.email,SignFbResquest,response.id,response.first_name,response.last_name);
+                	}else{
+                	validarEmailFacebook2(response.email,SignFbResquest,response.id,response.first_name,response.last_name);
+                	}
+                	}
+                });
+                } else if (response.status === 'not_authorized') {
+                    if(login==true){
+                    $('.breadcrumb').after('<div class="alert alert-danger warning"><i class="fa fa-exclamation-circle"></i> Ops, acesso ao facebook n&atilde;o foi autorizado!<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    }else{
+                    $('#div-login-msg-aviso').html('<div class="alert alert-danger warning"><i class="fa fa-exclamation-circle"></i> Ops, acesso ao facebook n&atilde;o foi autorizado!<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    }
+                    }}, {scope: 'public_profile,email'});
+            }
+            
+            function validarEmailFacebook(email,sign,user,nome,sobrenome){
+                console.log('fb login');
+                $.ajax({
+                    type: "POST",
+                    url: urlSSL+"index.php?route=account/registroexpress/entrarfb",
+                    dataType: 'json',
+                    data: {email:email,sign:sign,user:user}
+                }).done(function( dados ) {
+                    if(dados.erro==false){
+                    location.href = dados.href;	
+                    return true;
+                    }else{
+                    var url_cadastro = urlSSL+'index.php?route=account/registroexpress&fb='+email+'|'+nome+'|'+sobrenome+'';
+                    $('.breadcrumb').after('<div class="alert alert-danger warning"><i class="fa fa-exclamation-circle"></i> Ops, '+email+' n&atilde;o cadastrado na loja! <a href="'+url_cadastro+'">Clique aqui</a> e cadastre-se.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    return false;	
+                    }
+                });
+            }
+            
+            function validarEmailFacebook2(email,sign,user,nome,sobrenome){
+                console.log('fb empress');
+                $.ajax({
+                    type: "POST",
+                    url: urlSSL+"index.php?route=account/registroexpress/entrarfb",
+                    dataType: 'json',
+                    data: {email:email,sign:sign,user:user}
+                }).done(function( dados ) {
+                    if(dados.erro==false){
+                    location.reload(true);
+                    }else{
+                    $('#div-login-msg-aviso').html('<div class="alert alert-danger warning"><i class="fa fa-exclamation-circle"></i> Ops, '+email+' n&atilde;o cadastrado na loja!<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    return false;	
+                    }
+                });
+            }
+            </script>
+            <?php } ?>
+			]]>
+			</add>
+		</operation>
+	</file>
+
+	<file path="catalog/controller/checkout/checkout.php">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[public function index() {]]></search>
+			<add offset="0" trim="false" position="after"><![CDATA[			
+			//redireciona ao checkout customizado
+			if($this->config->get('compraexpress_status')){
+			$this->response->redirect($this->url->link('checkout/compraexpress','','SSL'));
+			exit;
+			}
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/controller/account/register.php">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[$this->load->language('account/register');]]></search>
+			<add offset="0" trim="false" position="after"><![CDATA[			
+			//redireciona ao checkout customizado
+			if($this->config->get('compraexpress_status')){
+			$this->response->redirect($this->url->link('account/registroexpress', '', 'SSL'));
+		    exit;
+			}
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/controller/checkout/confirm.php">
+		<operation>
+			<notes/>
+			<search index="0" regex="false" trim="false"><![CDATA[$order_data['customer_id'] = 0;]]></search>
+			<add offset="0" trim="false" position="after"><![CDATA[	
+			//se ativo aplica a id do cliente ao confirmar um pedido
+			if($this->config->get('compraexpress_status')){
+			$idCliente = ($this->customer->isLogged())?$this->customer->getId():$_GET['id'];
+			$order_data['customer_id'] = $idCliente;
+			}
+			]]></add>
+		</operation>
+		<operation>
+			<notes/>
+			<search index="0" regex="false" trim="false"><![CDATA[$data['products'][] = array(]]></search>
+			<add offset="0" trim="false" position="before"><![CDATA[	
+			$this->load->model('tool/image');
+			$this->load->model('tool/upload');
+			]]></add>
+		</operation>
+		<operation>
+			<notes/>
+			<search index="0" regex="false" trim="false"><![CDATA[$data['products'][] = array(]]></search>
+			<add offset="0" trim="false" position="after"><![CDATA[	
+			'imagem' => $this->model_tool_image->resize($product['image'], 80, 80),
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/model/account/order.php">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[return array(]]></search>
+			<add offset="0" trim="false" position="after"><![CDATA[	
+			//pega os campos customizados do cadastro do cliente
+			'custom_cliente' => (version_compare(VERSION, '2.0.3.1', '<=')?@unserialize($order_query->row['custom_field']):@json_decode($order_query->row['custom_field'],true)),
+			'custom_entrega' => (version_compare(VERSION, '2.0.3.1', '<=')?@unserialize($order_query->row['shipping_custom_field']):@json_decode($order_query->row['shipping_custom_field'],true)),
+			'custom_pagamento' => (version_compare(VERSION, '2.0.3.1', '<=')?@unserialize($order_query->row['payment_custom_field']):@json_decode($order_query->row['payment_custom_field'],true)),
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/controller/checkout/cart.php">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[$this->cart->add($this->request->post['product_id'], $quantity, $option, $recurring_id);]]></search>
+			<add offset="0" trim="false" position="after"><![CDATA[	
+			if($this->config->get('compraexpress_redirecionar')){
+			$json['redirect'] = $this->url->link('checkout/checkout','','SSL');
+			}
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/controller/account/order.php">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[$this->load->model('tool/upload');]]></search>
+			<add offset="0" trim="false" position="after"><![CDATA[			
+			//aplica campos customizados no cadastro e no email
+			$c2 = $this->config->get('compraexpress_numero');
+			$c3 = $this->config->get('compraexpress_complemento');
+
+			//endereco de cobranca
+			$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}, {numero}  <i>{complemento}</i>' . "\n" . '{address_2}' . "\n" . '{city}/{zone_code} - {postcode}';
+			$find = array(
+				'{firstname}',
+				'{lastname}',
+				'{company}',
+				'{address_1}',
+				'{address_2}',
+				'{numero}',
+				'{complemento}',
+				'{city}',
+				'{postcode}',
+				'{zone}',
+				'{zone_code}',
+				'{country}'
+			);
+			$replace = array(
+				'firstname' => $order_info['payment_firstname'],
+				'lastname'  => $order_info['payment_lastname'],
+				'company'   => $order_info['payment_company'],
+				'address_1' => $order_info['payment_address_1'],
+				'address_2' => $order_info['payment_address_2'],
+				'numero' => @$order_info['custom_pagamento'][$c2],
+				'complemento' => @$order_info['custom_pagamento'][$c3],
+				'city'      => $order_info['payment_city'],
+				'postcode'  => $order_info['payment_postcode'],
+				'zone'      => $order_info['payment_zone'],
+				'zone_code' => $order_info['payment_zone_code'],
+				'country'   => $order_info['payment_country']
+			);
+			$data['payment_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
+			
+			//endereco de entrega
+			$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}, {numero}  <i>{complemento}</i>' . "\n" . '{address_2}' . "\n" . '{city}/{zone_code} - {postcode}';
+			$find = array(
+				'{firstname}',
+				'{lastname}',
+				'{company}',
+				'{address_1}',
+				'{address_2}',
+				'{numero}',
+				'{complemento}',
+				'{city}',
+				'{postcode}',
+				'{zone}',
+				'{zone_code}',
+				'{country}'
+			);
+			$replace = array(
+				'firstname' => $order_info['shipping_firstname'],
+				'lastname'  => $order_info['shipping_lastname'],
+				'company'   => $order_info['shipping_company'],
+				'address_1' => $order_info['shipping_address_1'],
+				'address_2' => $order_info['shipping_address_2'],
+				'numero' => @$order_info['custom_entrega'][$c2],
+				'complemento' => @$order_info['custom_entrega'][$c3],
+				'city'      => $order_info['shipping_city'],
+				'postcode'  => $order_info['shipping_postcode'],
+				'zone'      => $order_info['shipping_zone'],
+				'zone_code' => $order_info['shipping_zone_code'],
+				'country'   => $order_info['shipping_country']
+			);
+			$data['shipping_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
+			//se nao tem endereco de entrega
+			if($order_info['shipping_zone_id']==0){
+			$data['shipping_address'] = false;
+			}
+			
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/model/checkout/order.php">
+		<operation>
+			<notes/>
+			<search index="" regex="false" trim="false"><![CDATA[$this->load->model('tool/upload');]]></search>
+			<add offset="0" trim="false" position="after"><![CDATA[			
+			//aplica campos customizados no cadastro e no email
+			$c2 = $this->config->get('compraexpress_numero');
+			$c3 = $this->config->get('compraexpress_complemento');
+
+			//endereco de cobranca
+			$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}, {numero} <i>{complemento}</i>' . "\n" . '{address_2}' . "\n" . '{city}/{zone_code} - {postcode}';
+			$find = array(
+				'{firstname}',
+				'{lastname}',
+				'{company}',
+				'{address_1}',
+				'{address_2}',
+				'{numero}',
+				'{complemento}',
+				'{city}',
+				'{postcode}',
+				'{zone}',
+				'{zone_code}',
+				'{country}'
+			);
+			$replace = array(
+				'firstname' => $order_info['payment_firstname'],
+				'lastname'  => $order_info['payment_lastname'],
+				'company'   => $order_info['payment_company'],
+				'address_1' => $order_info['payment_address_1'],
+				'address_2' => $order_info['payment_address_2'],
+				'numero' => @$order_info['payment_custom_field'][$c2],
+				'complemento' => @$order_info['payment_custom_field'][$c3],
+				'city'      => $order_info['payment_city'],
+				'postcode'  => $order_info['payment_postcode'],
+				'zone'      => $order_info['payment_zone'],
+				'zone_code' => $order_info['payment_zone_code'],
+				'country'   => $order_info['payment_country']
+			);
+			$data['payment_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
+			
+			//endereco de entrega
+			$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}, {numero} <i>{complemento}</i>' . "\n" . '{address_2}' . "\n" . '{city}/{zone_code} - {postcode}';
+			$find = array(
+				'{firstname}',
+				'{lastname}',
+				'{company}',
+				'{address_1}',
+				'{address_2}',
+				'{numero}',
+				'{complemento}',
+				'{city}',
+				'{postcode}',
+				'{zone}',
+				'{zone_code}',
+				'{country}'
+			);
+			$replace = array(
+				'firstname' => $order_info['shipping_firstname'],
+				'lastname'  => $order_info['shipping_lastname'],
+				'company'   => $order_info['shipping_company'],
+				'address_1' => $order_info['shipping_address_1'],
+				'address_2' => $order_info['shipping_address_2'],
+				'numero' => @$order_info['shipping_custom_field'][$c2],
+				'complemento' => @$order_info['shipping_custom_field'][$c3],
+				'city'      => $order_info['shipping_city'],
+				'postcode'  => $order_info['shipping_postcode'],
+				'zone'      => $order_info['shipping_zone'],
+				'zone_code' => $order_info['shipping_zone_code'],
+				'country'   => $order_info['shipping_country']
+			);
+			$data['shipping_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
+			//se nao tem endereco de entrega
+			if($order_info['shipping_zone_id']==0){
+			$data['shipping_address'] = false;
+			}
+			
+			]]></add>
+		</operation>
+	</file>
+	
+</modification>

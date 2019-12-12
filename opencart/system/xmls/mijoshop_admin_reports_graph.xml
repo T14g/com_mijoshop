@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>MijoShop - Admin Reports Graph</name>
+    <code>mijoshop_admin_reports_graph</code>
+    <version>1.0.0</version>
+    <link>http://www.miwisoft.com</link>
+    <author>Miwisoft LLC</author>
+
+    <file path="admin/controller/report/affilate.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+         $data['button_export'] = $this->language->get('button_export');
+
+         $graph = array(
+            'sales' => array(
+                'model'            => 'affiliate',
+                'function'         => 'commission',
+                'title'            => $this->language->get('text_sale'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=affiliate&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            ),
+            'orders'   => array(
+                'model'            => 'affiliate',
+                'function'         => 'commission',
+                'title'            => $this->language->get('text_order'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=affiliate&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#5cb85c',
+                'background-color' => '#FFFFFF',
+                'total'            => 'orders',
+                'price'            => false
+            ),
+            'commission' => array(
+                'model'            => 'affiliate',
+                'function'         => 'commission',
+                'title'            => $this->language->get('text_commission'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=affiliate&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#d9534f',
+                'background-color' => '#FFFFFF',
+                'total'            => 'commission',
+                'price'            => true
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/customer_credit.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'customer',
+                'function'         => 'credit',
+                'title'            => $this->language->get('text_sale'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=customer&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/customer_order.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'customer',
+                'function'         => 'orders',
+                'title'            => $this->language->get('text_sale'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=customer&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            ),
+            'orders'   => array(
+                'model'            => 'customer',
+                'function'         => 'orders',
+                'title'            => $this->language->get('text_order'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=customer&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#5cb85c',
+                'background-color' => '#FFFFFF',
+                'total'            => 'orders',
+                'price'            => false
+            ),
+            'products' => array(
+                'model'            => 'customer',
+                'function'         => 'orders',
+                'title'            => $this->language->get('text_product'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=customer&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#d9534f',
+                'background-color' => '#FFFFFF',
+                'total'            => 'products',
+                'price'            => false
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/customer_reward.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'customer',
+                'function'         => 'rewardpoints',
+                'title'            => $this->language->get('text_sale'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=customer&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            ),
+            'orders'   => array(
+                'model'            => 'customer',
+                'function'         => 'rewardpoints',
+                'title'            => $this->language->get('text_order'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=customer&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#5cb85c',
+                'background-color' => '#FFFFFF',
+                'total'            => 'orders',
+                'price'            => false
+            ),
+            'points' => array(
+                'model'            => 'customer',
+                'function'         => 'rewardpoints',
+                'title'            => $this->language->get('text_point'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=customer&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#d9534f',
+                'background-color' => '#FFFFFF',
+                'total'            => 'points',
+                'price'            => false
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/marketing.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'marketing',
+                'function'         => 'marketing',
+                'title'            => $this->language->get('text_sale'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=campaign&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            ),
+            'orders'   => array(
+                'model'            => 'marketing',
+                'function'         => 'marketing',
+                'title'            => $this->language->get('text_order'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=campaign&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#5cb85c',
+                'background-color' => '#FFFFFF',
+                'total'            => 'orders',
+                'price'            => false
+            ),
+            'clicks'   => array(
+                'model'            => 'marketing',
+                'function'         => 'marketing',
+                'title'            => $this->language->get('text_click'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=campaign&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#d9534f',
+                'background-color' => '#FFFFFF',
+                'total'            => 'clicks',
+                'price'            => false
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/product_purchased.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'product',
+                'function'         => 'purchased',
+                'title'            => $this->language->get('text_sale'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=name&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            ),
+            'orders'   => array(
+                'model'            => 'product',
+                'function'         => 'purchased',
+                'title'            => $this->language->get('text_quantity'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=name&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#5cb85c',
+                'background-color' => '#FFFFFF',
+                'total'            => 'quantity',
+                'price'            => false
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/product_viewed.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'product',
+                'function'         => 'productsviewed',
+                'title'            => $this->language->get('text_viewed'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'title=name&range=special&tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'viewed',
+                'price'            => false
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/sale_coupon.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'coupon',
+                'function'         => 'coupons',
+                'title'            => $this->language->get('text_coupon'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            ),
+            'orders'   => array(
+                'model'            => 'coupon',
+                'function'         => 'coupons',
+                'title'            => $this->language->get('text_order'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#5cb85c',
+                'background-color' => '#FFFFFF',
+                'total'            => 'orders',
+                'price'            => false
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/sale_order.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'sale',
+                'function'         => 'orders',
+                'title'            => $this->language->get('text_sale'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            ),
+            'orders'   => array(
+                'model'            => 'sale',
+                'function'         => 'orders',
+                'title'            => $this->language->get('text_order'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#5cb85c',
+                'background-color' => '#FFFFFF',
+                'total'            => 'orders',
+                'price'            => false
+            ),
+            'products' => array(
+                'model'            => 'sale',
+                'function'         => 'orders',
+                'title'            => $this->language->get('text_product'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#d9534f',
+                'background-color' => '#FFFFFF',
+                'total'            => 'products',
+                'price'            => false
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/sale_return.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'return',
+                'function'         => 'returns',
+                'title'            => $this->language->get('text_return'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/sale_shipping.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'sale',
+                'function'         => 'shipping',
+                'title'            => $this->language->get('text_sale'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            ),
+            'orders'   => array(
+                'model'            => 'sale',
+                'function'         => 'shipping',
+                'title'            => $this->language->get('text_order'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#5cb85c',
+                'background-color' => '#FFFFFF',
+                'total'            => 'orders',
+                'price'            => false
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/report/sale_tax.php">
+        <operation error="skip">
+            <search><![CDATA[$data['button_filter'] = $this->language->get('button_filter');]]></search>
+            <add position="after"><![CDATA[        $data['button_output'] = $this->language->get('button_output');
+        $data['button_export'] = $this->language->get('button_export');
+
+        $graph = array(
+            'sales' => array(
+                'model'            => 'sale',
+                'function'         => 'taxes',
+                'title'            => $this->language->get('text_sale'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#008db9',
+                'background-color' => '#FFFFFF',
+                'total'            => 'total',
+                'price'            => true
+            ),
+            'orders'   => array(
+                'model'            => 'sale',
+                'function'         => 'taxes',
+                'title'            => $this->language->get('text_order'),
+                'link'             => str_replace('&amp;', '&', $this->url->link('report/graph/graph', 'tmpl=component&format=raw&token=' . $this->session->data['token'] . '&' . http_build_query($filter_data) . '&page=' . $page, 'SSL')),
+                'color'            => '#5cb85c',
+                'background-color' => '#FFFFFF',
+                'total'            => 'orders',
+                'price'            => false
+            )
+        );
+
+        $data['graph'] = $this->load->controller('report/graph', $graph);]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/default.php">
+        <operation error="skip">
+            <search><![CDATA[$_['button_currency']]]></search>
+            <add position="before"><![CDATA[$_['button_output']                 = 'Print';
+$_['button_export']                 = 'Export';
+$_['tab_maintenance']               = 'Maintenance';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/affiliate.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_sale']         = 'Sales';
+$_['text_order']        = 'Orders';
+$_['text_commission']   = 'Commission';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/customer_credit.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_sale']             = 'Sales';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/customer_order.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_sale']             = 'Sales';
+$_['text_order']            = 'Orders';
+$_['text_product']          = 'Products';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/customer_reward.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_sale']             = 'Sales';
+$_['text_order']            = 'Orders';
+$_['text_point']            = 'Points';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/marketing.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_sale']             = 'Sales';
+$_['text_order']            = 'Orders';
+$_['text_click']            = 'Clicks';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/product_purchased.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_sale']             = 'Sales';
+$_['text_quantity']         = 'Quantity';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/product_viewed.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_viewed']      = 'Viewed';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/sale_coupon.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_coupon']      = 'Coupons';
+$_['text_order']       = 'Orders';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/sale_order.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_sale']         = 'Sales';
+$_['text_order']        = 'Orders';
+$_['text_product']      = 'Products';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/sale_return.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_return']       = 'Returns';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/sale_shipping.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_sale']         = 'Sales';
+$_['text_order']        = 'Orders';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/english/report/sale_tax.php">
+        <operation error="skip">
+            <search><![CDATA[$_['text_list']]]></search>
+            <add position="before"><![CDATA[$_['text_sale']         = 'Sales';
+$_['text_order']        = 'Orders';]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/affiliate.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/customer_credit.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/customer_order.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/customer_reward.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/marketing.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/product_purchased.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/product_viewed.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/sale_coupon.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/sale_order.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/sale_return.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/sale_shipping.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/report/sale_tax.tpl">
+        <operation error="skip">
+            <search><![CDATA[<h1><?php echo $heading_title; ?></h1>]]></search>
+            <add position="before"><![CDATA[      <div class="pull-right">
+        <button id="button-output" data-toggle="tooltip" title="<?php echo $button_output; ?>" class="btn btn-default"><i class="fa fa-print"></i></button>
+        <button id="button-export" data-toggle="tooltip" title="<?php echo $button_export; ?>" class="btn btn-default"><i class="fa fa-file-excel-o"></i></button>
+      </div>]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<div class="table-responsive">]]></search>
+            <add position="before"><![CDATA[        <?php echo $graph; ?>]]></add>
+        </operation>
+    </file>
+</modification>

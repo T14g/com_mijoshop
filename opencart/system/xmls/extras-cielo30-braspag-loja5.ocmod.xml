@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+<name>Cielo 3.0 e Braspag Webservice [Loja5]</name>
+<version>1.0</version>
+<code>cielo30-braspag-webservice-pedido-loja5</code>
+<link>http://www.loja5.com.br/</link>
+<author>Bruno Alencar - www.loja5.com.br</author>
+<description></description>
+
+<file path="admin/view/template/common/menu.tpl">
+<operation>
+<notes/>
+<search index="" regex="false" trim="false"><![CDATA[<li><a href="<?php echo $order; ?>"><?php echo $text_order; ?></a></li>]]></search>
+<add offset="0" trim="false" position="after"><![CDATA[	
+<li><a href="<?php echo $pedidos_braspag; ?>">Pedidos <?php echo ucfirst($operadora);?></a></li>
+]]></add>
+</operation>
+</file>
+
+<file path="admin/controller/common/menu.php">
+<operation>
+<notes/>
+<search index="" regex="false" trim="false"><![CDATA[$this->load->language('common/menu');]]></search>
+<add offset="0" trim="false" position="before"><![CDATA[
+$data['operadora'] = $this->config->get('braspag5_operadora');
+$data['pedidos_braspag'] = $this->url->link('payment/braspag5', '&pedidos=true&token=' . $this->session->data['token'], 'SSL');
+]]></add>
+</operation>
+</file>
+
+</modification>

@@ -11,4 +11,9 @@ defined('_JEXEC') or die('Restricted access');
 
 require_once(JPATH_ROOT.'/components/com_mijoshop/mijoshop/mijoshop.php');
 
-require_once(JPATH_ROOT.'/components/com_mijoshop/mijoshop/admin.php');
+if (MijoShop::get('base')->isAdmin()) {
+    require_once(JPATH_MIJOSHOP_LIB.'/admin2.php');
+}
+else {
+    require_once(JPATH_MIJOSHOP_LIB.'/site.php');
+}
