@@ -13,9 +13,32 @@ class ModelReportVendas extends Model {
 		return $query->row['total'];
     }
     
-    public function getVendas(){
+    public function getVendas($data = array()){
+		// var_dump($data);
+		$sql  = "SELECT op.name,p.date_added, SUM(IF(o.order_status_id = 0,1,0)) AS abandonados,SUM(IF(o.order_status_id = 5,1,0)) AS completos,SUM(IF(o.order_status_id = 1,1,0)) AS pendentes, SUM(IF(o.order_status_id = 2,1,0)) AS processando, SUM(IF(o.order_status_id = 7,1,0)) AS cancelados  FROM " . DB_PREFIX . "order o INNER JOIN `" . DB_PREFIX . "order_product` op ON (op.order_id = o.order_id) INNER JOIN `" . DB_PREFIX . "product` p ON (op.product_id = p.product_id) WHERE 1 = 1";
+		
 
-        $sql = "SELECT op.name,p.date_added, SUM(IF(o.order_status_id = 0,1,0)) AS abandonados,SUM(IF(o.order_status_id = 5,1,0)) AS completos,SUM(IF(o.order_status_id = 1,1,0)) AS pendentes, SUM(IF(o.order_status_id = 2,1,0)) AS processando, SUM(IF(o.order_status_id = 7,1,0)) AS cancelados  FROM " . DB_PREFIX . "order o INNER JOIN `" . DB_PREFIX . "order_product` op ON (op.order_id = o.order_id) INNER JOIN `" . DB_PREFIX . "product` p ON (op.product_id = p.product_id) group by op.name";
+		if (!empty($data['filter_estado_curso']) && $data['filter_estado_curso'] == "1") {
+			$sql .= " AND p.status = '1'";
+		}elseif(!empty($data['filter_estado_curso']) && $data['filter_estado_curso'] == "-1"){
+			$sql .= " AND p.status = '0' ";
+		}else{
+			$sql .= " AND p.status = '1'";
+		}
+
+		if (!empty($data['filter_name'])) {
+			echo "here";
+			$sql .= " AND op.name LIKE '" . $this->db->escape($data['filter_name']) . "%'";
+		}
+
+
+		if (!empty($data['data_curso'])) {
+			$sql .= " WHERE p.date_added = '" . $data['data_curso'] . "'";
+		}
+
+		$sql .=" group by op.name";
+
+
         $query = $this->db->query($sql);
 		// var_dump($query->rows); 
 		return $query->rows;

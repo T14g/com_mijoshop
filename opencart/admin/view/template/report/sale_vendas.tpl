@@ -19,48 +19,44 @@
         <div class="well">
           <div class="row">
             <div class="col-sm-6">
+             <div class="form-group">
+                <label class="control-label" for="input-name">Nome do curso</label>
+                <input type="text" name="filter_name" value="<?php echo $nome_curso; ?>" placeholder="<?php echo $entry_name; ?>" id="input-name" class="form-control" />
+              </div>
+              
+
               <div class="form-group">
-                <label class="control-label" for="input-date-start"><?php echo $entry_date_start; ?></label>
+                <label class="control-label" for="input-date-start">De:</label>
                 <div class="input-group date">
-                  <input type="text" name="filter_date_start" value="<?php echo $filter_date_start; ?>" placeholder="<?php echo $entry_date_start; ?>" data-date-format="YYYY-MM-DD" id="input-date-start" class="form-control" />
+                  <input type="text" name="data_curso" value="<?php echo $data_curso; ?>" placeholder="Data do curso" data-date-format="YYYY-MM-DD" id="input-date-start" class="form-control" />
                   <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                   </span></div>
               </div>
-              <div class="form-group">
-                <label class="control-label" for="input-date-end"><?php echo $entry_date_end; ?></label>
-                <div class="input-group date">
-                  <input type="text" name="filter_date_end" value="<?php echo $filter_date_end; ?>" placeholder="<?php echo $entry_date_end; ?>" data-date-format="YYYY-MM-DD" id="input-date-end" class="form-control" />
-                  <span class="input-group-btn">
-                  <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
-                  </span></div>
-              </div>
+             
             </div>
             <div class="col-sm-6">
-              <div class="form-group">
-                <label class="control-label" for="input-group"><?php echo $entry_group; ?></label>
-                <select name="filter_group" id="input-group" class="form-control">
-                  <?php foreach ($groups as $group) { ?>
-                  <?php if ($group['value'] == $filter_group) { ?>
-                  <option value="<?php echo $group['value']; ?>" selected="selected"><?php echo $group['text']; ?></option>
-                  <?php } else { ?>
-                  <option value="<?php echo $group['value']; ?>"><?php echo $group['text']; ?></option>
-                  <?php } ?>
-                  <?php } ?>
+             <div class="form-group">
+                <label class="control-label" for="input-status">Estado do curso</label>
+                <select name="filter_estado_curso" id="input-status" class="form-control">
+                  <?php if ( $estado_curso == -1 ):?>
+                    <option value="1">Ativado</option>
+                    <option value="-1" selected>Desativado</option>
+                  <?php else: ?>
+                    <option value="1" selected>Ativado</option>
+                    <option value="-1">Desativado</option>
+                  <?php endif; ?>
+                 
                 </select>
               </div>
+
               <div class="form-group">
-                <label class="control-label" for="input-status"><?php echo $entry_status; ?></label>
-                <select name="filter_order_status_id" id="input-status" class="form-control">
-                  <option value="0"><?php echo $text_all_status; ?></option>
-                  <?php foreach ($order_statuses as $order_status) { ?>
-                  <?php if ($order_status['order_status_id'] == $filter_order_status_id) { ?>
-                  <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
-                  <?php } else { ?>
-                  <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
-                  <?php } ?>
-                  <?php } ?>
-                </select>
+                <label class="control-label" for="input-date-start">Até:</label>
+                <div class="input-group date">
+                  <input type="text" name="data_curso" value="<?php echo $data_curso; ?>" placeholder="Data do curso" data-date-format="YYYY-MM-DD" id="input-date-start" class="form-control" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                  </span></div>
               </div>
               <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> <?php echo $button_filter; ?></button>
             </div>
@@ -109,35 +105,32 @@
   </div>
   <script type="text/javascript"><!--
 $('#button-filter').on('click', function() {
-	url = 'index.php?route=report/sale_order&token=<?php echo $token; ?>';
+	url = 'index.php?route=report/sale_vendas&token=<?php echo $token; ?>';
+
+  var filter_name = $('input[name=\'filter_name\']').val();
+
+	if (filter_name) {
+		url += '&filter_name=' + encodeURIComponent(filter_name);
+	}
 	
-	var filter_date_start = $('input[name=\'filter_date_start\']').val();
+	var data_curso = $('input[name=\'data_curso\']').val();
 	
-	if (filter_date_start) {
-		url += '&filter_date_start=' + encodeURIComponent(filter_date_start);
+	if (data_curso) {
+		url += '&data_curso=' + encodeURIComponent(data_curso);
 	}
 
-	var filter_date_end = $('input[name=\'filter_date_end\']').val();
+	var filter_estado_curso = $('select[name=\'filter_estado_curso\']').val();
 	
-	if (filter_date_end) {
-		url += '&filter_date_end=' + encodeURIComponent(filter_date_end);
+	if (filter_estado_curso) {
+		url += '&filter_estado_curso=' + encodeURIComponent(filter_estado_curso);
 	}
-		
-	var filter_group = $('select[name=\'filter_group\']').val();
-	
-	if (filter_group) {
-		url += '&filter_group=' + encodeURIComponent(filter_group);
-	}
-	
-	var filter_order_status_id = $('select[name=\'filter_order_status_id\']').val();
-	
-	if (filter_order_status_id != 0) {
-		url += '&filter_order_status_id=' + encodeURIComponent(filter_order_status_id);
-	}	
 
 	location = url;
 });
+
+
 //--></script> 
+
   <script type="text/javascript"><!--
 $('.date').datetimepicker({
 	pickTime: false
