@@ -14,30 +14,11 @@ class ModelReportVendas extends Model {
     }
     
     public function getVendas(){
-        $sql = "SELECT SUM(IF(o.order_status_id = 5,1,0)) AS completos,SUM(IF(o.order_status_id = 1,1,0)) AS pendentes, SUM(IF(o.order_status_id = 2,1,0)) AS processando, SUM(IF(o.order_status_id = 7,1,0)) AS cancelados  FROM " . DB_PREFIX . "order o";
+
+        $sql = "SELECT op.name,p.date_added, SUM(IF(o.order_status_id = 0,1,0)) AS abandonados,SUM(IF(o.order_status_id = 5,1,0)) AS completos,SUM(IF(o.order_status_id = 1,1,0)) AS pendentes, SUM(IF(o.order_status_id = 2,1,0)) AS processando, SUM(IF(o.order_status_id = 7,1,0)) AS cancelados  FROM " . DB_PREFIX . "order o INNER JOIN `" . DB_PREFIX . "order_product` op ON (op.order_id = o.order_id) INNER JOIN `" . DB_PREFIX . "product` p ON (op.product_id = p.product_id) group by op.name";
         $query = $this->db->query($sql);
-        var_dump($query->rows); 
-        // $sql = "SELECT CID, 
-        // Count(DISTINCT O.OrderID) AS TotalOrders, 
-        // Sum(OI.Quantity*OI.SalePrice) AS TotalDollarAmount 
-        // FROM [Order] O
-        // INNER JOIN [OrderItem] OI
-        // ON O.OrderID = OI.OrderID
-        // GROUP BY CID 
-        // Order BY Count(DISTINCT O.OrderID) DESC";
-
-
-
-// SELECT COUNT(id) as total_students, SUM(IF(grade>=50,1,0)) as pass, SUM(IF(grade<50,1,0)) as fail FROM students_grades
-       
-        // sum(case order_status_id = 2 then 1 else 0 end) AS teste2
-        // // $sql = "SELECT COUNT(*) AS completos FROM " . DB_PREFIX . "order WHERE order_status_id = 0";
-    
-        // // SELECT COUNT(ProductID) AS NumberOfProducts FROM Products;
-		
-
-        // return $query->rows;
-        // echo "ola";
+		// var_dump($query->rows); 
+		return $query->rows;
         
     }
 		

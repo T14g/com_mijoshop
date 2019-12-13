@@ -84,13 +84,12 @@
               <?php foreach ($cursos as $curso) { ?>
               <tr>
                 <td class="text-left"><?php echo $curso['nome_curso']; ?></td>
-                <td class="text-left"><?php echo curso['date_start']; ?></td>
-                <td class="text-left"><?php echo curso['date_end']; ?></td>
-                <td class="text-right"><?php echo curso['orders']; ?></td>
-                <td class="text-right"><?php echo curso['products']; ?></td>
-        
-                <td class="text-right"><?php echo curso['total']; ?></td>
-                <td> I walk alone i</td>
+                <td class="text-left"><?php echo $curso['completos']; ?></td>
+                <td class="text-left"><?php echo $curso['pendentes']; ?></td>
+                <td class="text-right"><?php echo $curso['processando']; ?></td>
+                <td class="text-right"><?php echo $curso['abandonados']; ?></td>
+                <td class="text-right"><?php echo $curso['cancelados']; ?></td>
+                 <td class="text-right"><?php echo $curso['data_curso']; ?></td>
               </tr>
               <?php } ?>
               <?php } else { ?>

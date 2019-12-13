@@ -90,18 +90,18 @@ class ControllerReportSaleVendas extends Controller {
 		$resultados = $this->model_report_vendas->getVendas();
 
 		foreach ($resultados as $result) {
-			$data['cursos'][] = array(
-				// 'date_start' => date($this->language->get('date_format_short'), strtotime($result['date_start'])),
-				// 'date_end'   => date($this->language->get('date_format_short'), strtotime($result['date_end'])),
-				// 'orders'     => $result['orders'],
-				// 'products'   => $result['products'],
-				'nome_curso' => $result['name'],
-				// 'tax'        => $this->currency->format($result['tax'], $this->config->get('config_currency')),
-				// 'total'      => $this->currency->format($result['total'], $this->config->get('config_currency'))
-			);
+
+			 $data['cursos'][] = array(
+				  'nome_curso' => $result['name'],
+				  'abandonados' => $result['abandonados'],
+				  'pendentes' => $result['pendentes'],
+				  'processando' => $result['processando'],
+				  'completos' => $result['completos'],
+				  'cancelados' => $result['cancelados'],
+				  'data_curso' => date('d-m-Y', strtotime($result['date_added']))
+			 );
 		}
 
-		// var_dump($data['cursos']);
 
 		$data['heading_title'] = $this->language->get('heading_title');
 		
