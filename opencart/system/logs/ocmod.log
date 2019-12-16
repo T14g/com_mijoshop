@@ -1,4 +1,4 @@
-2019-12-12 21:36:38 - MOD: Modification Default
+2019-12-16 21:14:08 - MOD: Modification Default
 FILE: system/engine/action.php
 REGEX: ~(require|include)(_once)?\(([^)]+)~
 LINE: 58
@@ -4260,6 +4260,12 @@ LINE: 173
 CODE: <li><a href="<?php echo $report_product_purchased; ?>"><?php echo $text_report_product_purchased; ?></a></li>
 LINE: 403
 ----------------------------------------------------------------
+MOD: Relatório de vendas
+CODE: $data['report_sale_order'] = $this->url->link('report/sale_order', 'token=' . $this->session->data['token'], 'SSL');
+LINE: 186
+CODE: <?php if($preturn_sale_tax) { ?>
+LINE: 381
+----------------------------------------------------------------
 MOD: Unica unidade e Produto
 CODE: function add() {
 LINE: 289
@@ -4734,9 +4740,9 @@ LINE: 87
 CODE: $data['text_zone'] = $this->language->get('text_zone');
 LINE: 107
 CODE: $data['zone'] = $this->url->link('localisation/zone', 'token=' . $this->session->data['token'], 'SSL');
-LINE: 227
+LINE: 230
 CODE: return $this->load->view('common/menu.tpl', $data);
-LINE: 358
+LINE: 361
 CODE: $sql .= " OR LCASE(p.model) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
 LINE: 135
 LINE: 513

@@ -376,6 +376,9 @@
 		<?php if($preturn_sale_order) { ?>
           <li><a href="<?php echo $report_sale_order; ?>"><?php echo $text_report_sale_order; ?></a></li>
 		<?php }?>
+
+			<li><a href="<?php echo $report_sale_vendas; ?>">Relatório de Vendas</a></li>
+			
 		<?php if($preturn_sale_tax) { ?>
           <li><a href="<?php echo $report_sale_tax; ?>"><?php echo $text_report_sale_tax; ?></a></li>
 		<?php } ?>

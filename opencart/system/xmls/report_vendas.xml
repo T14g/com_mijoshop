@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<name>Relatório de vendas</name>
+	<version>1.0.2</version>
+	<author> T14g - Tiago - 16/12/19</author>
+
+	<file path="admin/controller/common/menu.php">
+   		<operation error="skip">
+   			<search><![CDATA[
+			$data['report_sale_order'] = $this->url->link('report/sale_order', 'token=' . $this->session->data['token'], 'SSL');
+			]]></search>
+   			<add position="after">
+			<![CDATA[
+			$data['report_sale_vendas'] = $this->url->link('report/sale_vendas', 'token=' . $this->session->data['token'], 'SSL');
+			]]>
+   			</add>
+   		</operation>
+
+ 
+   	</file>
+	<file path="admin/view/template/common/menu.tpl">
+   		<operation error="skip">
+   			<search><![CDATA[<?php if($preturn_sale_tax) { ?>]]></search>
+   			<add position="before">
+			<![CDATA[
+			<li><a href="<?php echo $report_sale_vendas; ?>">Relatório de Vendas</a></li>
+			]]>
+   			</add>
+   		</operation>
+   	</file>
+</modification>
