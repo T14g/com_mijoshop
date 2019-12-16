@@ -28,7 +28,7 @@
               <div class="form-group">
                 <label class="control-label" for="input-date-start">De:</label>
                 <div class="input-group date">
-                  <input type="text" name="data_curso" value="<?php echo $data_curso; ?>" placeholder="Data do curso" data-date-format="YYYY-MM-DD" id="input-date-start" class="form-control" />
+                  <input type="text" name="data_start_curso" value="<?php echo $data_inicio; ?>" placeholder="<?php echo $data_inicio; ?>" data-date-format="YYYY-MM-DD" id="input-date-start" class="form-control" />
                   <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                   </span></div>
@@ -53,7 +53,7 @@
               <div class="form-group">
                 <label class="control-label" for="input-date-start">Até:</label>
                 <div class="input-group date">
-                  <input type="text" name="data_curso" value="<?php echo $data_curso; ?>" placeholder="Data do curso" data-date-format="YYYY-MM-DD" id="input-date-start" class="form-control" />
+                  <input type="text" name="data_end_curso" value="<?php echo $data_curso_end; ?>" placeholder="<?php echo $data_fim; ?>" data-date-format="YYYY-MM-DD" id="input-date-end" class="form-control" />
                   <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                   </span></div>
@@ -113,11 +113,18 @@ $('#button-filter').on('click', function() {
 		url += '&filter_name=' + encodeURIComponent(filter_name);
 	}
 	
-	var data_curso = $('input[name=\'data_curso\']').val();
+	var data_start_curso = $('input[name=\'data_start_curso\']').val();
 	
-	if (data_curso) {
-		url += '&data_curso=' + encodeURIComponent(data_curso);
+	if (data_start_curso) {
+		url += '&data_start_curso=' + encodeURIComponent(data_start_curso);
 	}
+
+  var data_end_curso = $('input[name=\'data_end_curso\']').val();
+	
+	if (data_end_curso) {
+		url += '&data_end_curso=' + encodeURIComponent(data_end_curso);
+	}
+
 
 	var filter_estado_curso = $('select[name=\'filter_estado_curso\']').val();
 	

@@ -5,16 +5,16 @@ class ControllerReportSaleVendas extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		if (isset($this->request->get['filter_date_start'])) {
-			$filter_date_start = $this->request->get['filter_date_start'];
+		if (isset($this->request->get['data_start_curso'])) {
+			$filter_date_start = $this->request->get['data_start_curso'];
 		} else {
-			$filter_date_start = date('Y-m-d', strtotime(date('Y') . '-' . date('m') . '-01'));
+			$filter_date_start = "";
 		}
 
-		if (isset($this->request->get['filter_date_end'])) {
-			$filter_date_end = $this->request->get['filter_date_end'];
+		if (isset($this->request->get['data_end_curso'])) {
+			$filter_date_end = $this->request->get['data_end_curso'];
 		} else {
-			$filter_date_end = date('Y-m-d');
+			$filter_date_end = "";
 		}
 
 		if (isset($this->request->get['filter_group'])) {
@@ -57,8 +57,12 @@ class ControllerReportSaleVendas extends Controller {
 			$data['estado_curso'] = $this->request->get['filter_estado_curso'];
 		}
 
+		if (isset($this->request->get['filter_date_start'])) {
+			$url .= '&filter_date_start=' . $this->request->get['data_start_curso'];
+		}
+
 		if (isset($this->request->get['filter_date_end'])) {
-			$url .= '&filter_date_end=' . $this->request->get['filter_date_end'];
+			$url .= '&filter_date_end=' . $this->request->get['data_end_curso'];
 		}
 
 		if (isset($this->request->get['filter_group'])) {
@@ -85,40 +89,49 @@ class ControllerReportSaleVendas extends Controller {
 			'href' => $this->url->link('report/sale_vendas', 'token=' . $this->session->data['token'] . $url, 'SSL')
 		);
 
+		//T14g - Filters values
+		$data['data_inicio'] = $filter_date_start;
+		$data['data_fim']    = $filter_date_end;
+
 		$this->load->model('report/sale');
 
 		$data['orders'] = array();
 
 		$filter_data = array(
 			'filter_estado_curso'	 => $filter_estado_curso,
-			'filter_name'			 => $filter_name_curso
-			// 'filter_date_end'	     => $filter_date_end,
+			'filter_name'			 => $filter_name_curso,
+			'filter_date_start'	     => $filter_date_start,
+			'filter_date_end'	     => $filter_date_end,
 			// 'filter_group'           => $filter_group,
 			// 'filter_order_status_id' => $filter_order_status_id,
 			// 'start'                  => ($page - 1) * $this->config->get('config_limit_admin'),
 			// 'limit'                  => $this->config->get('config_limit_admin')
 		);
 
-		// $order_total = $this->model_report_sale->getTotalOrders($filter_data);
+		
 
 		// T14g - You Must load this 
 		$this->load->model('report/vendas');
 
 		$resultados = $this->model_report_vendas->getVendas($filter_data);
-
+		$order_total = $this->model_report_vendas->getTotalVendas();
+		
 		foreach ($resultados as $result) {
 
 			 $data['cursos'][] = array(
-				  'nome_curso' => $result['name'],
+				  'nome_curso'  => $result['name'],
 				  'abandonados' => $result['abandonados'],
-				  'pendentes' => $result['pendentes'],
+				  'pendentes'   => $result['pendentes'],
 				  'processando' => $result['processando'],
-				  'completos' => $result['completos'],
-				  'cancelados' => $result['cancelados'],
-				  'data_curso' => date('d-m-Y', strtotime($result['date_added']))
+				  'completos'   => $result['completos'],
+				  'cancelados'  => $result['cancelados'],
+				  'data_curso'  => date('d-m-Y', strtotime($result['date_added']))
 			 );
+
+			//  var_dump($data['cursos']);
 		}
 
+		
 
 		$data['heading_title'] = $this->language->get('heading_title');
 		
@@ -189,15 +202,15 @@ class ControllerReportSaleVendas extends Controller {
 
 		// T14g- Filters Vendas de Cursos 
 
-		$pagination = new Pagination();
-		$pagination->total = $order_total;
-		$pagination->page = $page;
-		$pagination->limit = $this->config->get('config_limit_admin');
-		$pagination->url = $this->url->link('report/sale_vendas', 'token=' . $this->session->data['token'] . $url . '&page={page}', 'SSL');
+		// $pagination = new Pagination();
+		// $pagination->total = $order_total;
+		// $pagination->page = $page;
+		// $pagination->limit = $this->config->get('config_limit_admin');
+		// $pagination->url = $this->url->link('report/sale_vendas', 'token=' . $this->session->data['token'] . $url . '&page={page}', 'SSL');
 
-		$data['pagination'] = $pagination->render();
+		// $data['pagination'] = $pagination->render();
 
-		$data['results'] = sprintf($this->language->get('text_pagination'), ($order_total) ? (($page - 1) * $this->config->get('config_limit_admin')) + 1 : 0, ((($page - 1) * $this->config->get('config_limit_admin')) > ($order_total - $this->config->get('config_limit_admin'))) ? $order_total : ((($page - 1) * $this->config->get('config_limit_admin')) + $this->config->get('config_limit_admin')), $order_total, ceil($order_total / $this->config->get('config_limit_admin')));
+		// $data['results'] = sprintf($this->language->get('text_pagination'), ($order_total) ? (($page - 1) * $this->config->get('config_limit_admin')) + 1 : 0, ((($page - 1) * $this->config->get('config_limit_admin')) > ($order_total - $this->config->get('config_limit_admin'))) ? $order_total : ((($page - 1) * $this->config->get('config_limit_admin')) + $this->config->get('config_limit_admin')), $order_total, ceil($order_total / $this->config->get('config_limit_admin')));
 
 		$data['filter_date_start'] = $filter_date_start;
 		$data['filter_date_end'] = $filter_date_end;
